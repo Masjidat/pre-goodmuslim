@@ -1,5 +1,28 @@
 [
+    {"source": "app\/assistants\/stage-assistant.js"},
     {
-        "source": "app\/assistants\/stage-assistant.js"
+        "source": "app\/assistants\/main-assistant.js",
+        "scenes": "main"
+    },
+    {
+        "source": "app\/assistants\/about-assistant.js",
+        "scenes": "about"
+    },
+    {
+        "source": "app\/assistants\/preferences-assistant.js",
+        "scenes": "preferences"
+    },
+    {"source": "scripts\/PrayTime.js"},
+    {"source": "scripts\/QiblaDirection.js"},
+    {"source": "scripts\/storage.js"},
+    {"source": "scripts\/MoonPhase.js"},
+    {"source": "scripts\/AppMenuHelper.js"},
+    {
+        "source": "app\/assistants\/moon-phase-assistant.js",
+        "scenes": "moon-phase"
+    },
+    {
+        "source": "app\/assistants\/qibla-direction-assistant.js",
+        "scenes": "qibla-direction"
     }
 ]
