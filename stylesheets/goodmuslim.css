@@ -1,1 +1,10 @@
 /* Put Application specific CSS here. */
+
+.highlighted {
+		color: green;
+		font-size: larger !important;
+}
+
+.clock {
+	background: url('images/icons/clock.png');
+}
