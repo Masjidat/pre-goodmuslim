@@ -218,7 +218,7 @@ MainAssistant.prototype.handleServiceResponseReverse = function (event) {
 	last_part = parts.pop();
 	if (isNaN(last_part) || last_part.length != 5) {
 		try {
-			$('logger').update(last_part);
+			//$('logger').update(last_part);
 		} 
 		catch (e) {
 			$('logger').update(e.message);
