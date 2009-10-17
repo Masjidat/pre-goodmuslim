@@ -1,9 +1,9 @@
 {
 	"id": "com.xivix.goodmuslim",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"vendor": "Xivix Software Solutions",
 	"type": "web",
 	"main": "index.html",
 	"title": "Good Muslim",
 	"icon": "icon.png"
-}
+} 
