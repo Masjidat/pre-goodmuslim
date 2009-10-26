@@ -18,6 +18,8 @@
     {"source": "scripts\/QiblaDirection.js"},
     {"source": "scripts\/storage.js"},
     {"source": "scripts\/MoonPhase.js"},
+    {"source": "scripts\/LocationManager.js"},
+    {"source": "scripts\/PrayerTimeManager.js"},
     {"source": "scripts\/AppMenuHelper.js"},
     {
         "source": "app\/assistants\/moon-phase-assistant.js",
@@ -30,5 +32,9 @@
     {
         "source": "app\/assistants\/azan-assistant.js",
         "scenes": "azan"
+    },
+    {
+        "source": "app\/assistants\/azan-popup-assistant.js",
+        "scenes": "azan-popup"
     }
 ]

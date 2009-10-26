@@ -3,7 +3,7 @@ function StageAssistant() {
 
 StageAssistant.prototype.setup = function() {
 	
-	this.controller.pushScene("preferences");
+	//this.controller.pushScene("azan-popup");
 	
 }
 
