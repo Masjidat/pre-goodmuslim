@@ -1,5 +1,7 @@
 [
+    {"source": "app\/assistants\/app-assistant.js"},
     {"source": "app\/assistants\/stage-assistant.js"},
+    {"source": "app\/assistants\/azan-stage-assistant.js"},
     {
         "source": "app\/assistants\/main-assistant.js",
         "scenes": "main"
@@ -24,5 +26,9 @@
     {
         "source": "app\/assistants\/qibla-direction-assistant.js",
         "scenes": "qibla-direction"
+    },
+    {
+        "source": "app\/assistants\/azan-assistant.js",
+        "scenes": "azan"
     }
 ]

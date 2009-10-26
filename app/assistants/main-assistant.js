@@ -3,7 +3,8 @@ function MainAssistant() {
 }
 
 MainAssistant.prototype.setup = function() {
-		
+	Mojo.Controller.getAppController().showBanner("test banner");
+	
 	this.controller.setupWidget(Mojo.Menu.viewMenu,
         {
            
@@ -44,6 +45,22 @@ MainAssistant.prototype.setup = function() {
 		menuHelper.setupMenu(this.controller, "PrayerTimes");
 	} catch (e) { $('logger').update(e.message);}
 	
+	this.model = {
+     buttonLabel : "Button 5"
+	};
+	this.controller.setupWidget('myButton', {}, this.model);
+	//add a listener
+	this.controller.listen('myButton', Mojo.Event.tap, this.tapped.bind(this));
+	
+	
+}
+
+MainAssistant.prototype.activate = function(event) {
+
+	  if (!appData.location["default"])
+	  	this.calcTimes();
+	  else 
+	  	Mojo.Controller.errorDialog($L("Your Location is required to calculate Prayer Times.  Please update your location by using the button in the upper right."));
 }
 
 MainAssistant.prototype.parseTime = function(time)
@@ -71,6 +88,51 @@ MainAssistant.prototype.parseTime = function(time)
 	return prayer_time;
 }
 
+MainAssistant.prototype.setAlarm = function (key, time) {
+
+	//parameters for the alarm service call	
+	var params = {
+			"wakeup": true,
+			"key": "com.xivix.goodmuslim." + key,
+			"uri": "palm://com.palm.applicationManager/launch",
+			"params": '{"id":"com.xivix.goodmuslim","params":{"action":"playAzan", "prayer":"' + key + '"}}',
+			};
+	
+	
+	var d = time;
+	
+	if (d.getTime() < new Date().getTime())
+		return;
+	//d = new Date(new Date().getTime() + (1 * 60 * 1000));
+
+	//make sure to use UTC time
+	params['at'] = d.format("UTC:mm/dd/yyyy HH:MM:ss");
+	
+	/*
+	 params["at"] = (d.getUTCMonth()+1)+'/'+d.getUTCDate()+'/'+d.getUTCFullYear()
+					+" "+d.getUTCHours()+":"+d.getUTCMinutes();
+	 */
+					
+	//$('logger').update($('logger').innerHTML + "<BR>" + key +  params["at"]);
+    //set the alarm
+	this.controller.serviceRequest('palm://com.palm.power/timeout', { 
+		method: "set",
+		parameters: params,
+		onSuccess:  this.handleAlarmSetResponse.bind(this),
+		onFailure:  this.handleAlarmSetResponseError.bind(this)
+	});
+}
+
+MainAssistant.prototype.handleAlarmSetResponse = function (event)
+{
+	//$('logger').update($('logger').innerHTML + "<BR>" + "event received" + event.returnValue);
+}
+
+MainAssistant.prototype.handleAlarmSetResponseError = function (error)
+{
+	$('logger').update("error received: " + error);
+}
+
 MainAssistant.prototype.calcTimes = function () {
 	
 
@@ -79,7 +141,9 @@ MainAssistant.prototype.calcTimes = function () {
 	prayTime.setHighLatsMethod(prayTime[appData.preferences.latitudeAdjustment]);
 	prayTime.setTimeFormat(prayTime[appData.preferences.timeFormat]);	
 	
-	var prayerTimesArray = prayTime.getPrayerTimes (new Date(), appData.location.latitude, appData.location.longitude, 'auto')
+	var prayerTimesArray = prayTime.getPrayerTimes (new Date(), appData.location.latitude, appData.location.longitude, 'auto');
+	
+	appData.preferences.latestTimes = prayerTimesArray;
 		
 	var now = new Date();
 	var tomorrow = new Date(now.getTime() + (24 * 60 * 60 * 1000));
@@ -105,6 +169,8 @@ MainAssistant.prototype.calcTimes = function () {
 		} else {
 			$('times_' + i).removeClassName("highlighted");
 		}
+		
+		this.setAlarm(prayTime.timeNames[i], thisPrayer);
 		
 	}
 
@@ -152,7 +218,6 @@ MainAssistant.prototype.handleCommand = function(event) {
 			
 		default:
 			// see if our app menu helper can use this...
-			menuHelper.handleCommand(this.controller, event);
 			break;
 		}
     }
@@ -237,25 +302,41 @@ MainAssistant.prototype.handleServiceResponseReverse = function (event) {
 	this.updateViewMenu();
 	appData.saveLocation();
 	
-	
-	
+
+}
+
+MainAssistant.prototype.tapped = function(event) {
+     $('logger').update("button pressed");
+	 /*
+	  this.controller.serviceRequest('palm://com.palm.power/timeout', {
+		method: "set",
+		parameters: {
+			"wakeup": true,
+			"key": "com.xivix.goodmuslim.fajr",
+			"uri": "palm://com.palm.applicationManager/launch",
+			"params": '{"id":"com.xivix.goodmuslim","params":{"action":"playAzan", "prayer":"fajr"}}',
+			"at": "10/25/2009 03:20:00"
+			},
+		onSuccess: function() { $('logger').update(new Date());},
+		onFailure: function() { $('logger').update("can't set timer");}
+	});
+	*/
+	try {
+		this.audioPlayer = new Audio();
+		var file = Mojo.appPath + "sounds/azan.mp3";
+		this.audioPlayer.src = file;
+		$('logger').update(file);
+	} 
+	catch (e) {
+		$('logger').update(e.message);
+	}
+	//Mojo.Controller.getAppController().assistant.handleLaunch( {"action":"playAzan", "prayer": "Fajr"} );
 }
 
 MainAssistant.prototype.handleServiceResponseReverseError = function (event) {
 	// do nothing..
 	Mojo.Controller.errorDialog($L("Sorry, we couldn't get your city name."));
 	this.stopSpinner();
-}
-
-MainAssistant.prototype.activate = function(event) {
-	/* put in event handlers here that should only be in effect when this scene is active. For
-	   example, key handlers that are observing the document */
-	  if (!appData.location["default"])
-	  	this.calcTimes();
-	  else 
-	  	Mojo.Controller.errorDialog($L("Your Location is required to calculate Prayer Times.  Please update your location by using the button in the upper right."));
-
-	
 }
 
 
