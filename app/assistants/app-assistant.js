@@ -1,6 +1,7 @@
 function AppAssistant(appController) {
 	this.MainStageName = "mainstage";
 	this.AzanStageName = "azanstage";	
+	this.AzanPopupStageName = "azanpopup";
 }
 
 AppAssistant.prototype.setup = function() {
@@ -46,6 +47,11 @@ AppAssistant.prototype.handleLaunch = function (launchParams) {
 				case "playAzan":
 					this.handlePlayAzan(launchParams.prayer);
 					break;
+					
+				case "updateTimes":
+					prayerTimeManager.calcTimes();
+					Mojo.Controller.getAppController().showBanner("Updating Times", {action: 'launchApp'});
+					break;
 			}
 		}
 	} catch (e) {
@@ -55,6 +61,14 @@ AppAssistant.prototype.handleLaunch = function (launchParams) {
 };
 
 AppAssistant.prototype.handlePlayAzan = function(whichAzan){
+
+	if (appData.preferences['notify' + whichAzan] == "none")	
+		return;
+		
+	if (appData.preferences['notify' + whichAzan] == "azan"){
+		this.handleAzanPopup(whichAzan);
+		return;
+	}
 
 	var dashboardStage = Mojo.Controller.getAppController().getStageProxy(this.AzanStageName);
 	if(dashboardStage) {
@@ -70,6 +84,35 @@ AppAssistant.prototype.handlePlayAzan = function(whichAzan){
 				assistant: "AzanStageAssistant"
 			};
 		Mojo.Controller.getAppController().createStageWithCallback(stageArgs, pushDashboard, 'dashboard');
+	}
+}
+
+AppAssistant.prototype.handleAzanPopup = function(whichAzan){
+
+	var stageProxy = this.controller.getStageProxy(this.AzanPopupStageName);
+	var stageController = this.controller.getStageController(this.AzanPopupStageName);
+	
+	if (stageProxy) {
+		// If the stage exists, just bring it to the front by focusing its window.
+		// Or, if it is just the proxy, then it is being focused, so exit.
+		if (stageController) {
+			stageController.window.focus();
+		}
+	}
+	else {
+		// Create a callback function to set up the new main stage
+		// after it is done loading. It is passed the new stage controller
+		// as the first parameter.
+		var pushMainScene = function(stageController){
+			stageController.pushScene("azan-popup", whichAzan);
+		};
+		var stageArguments = {
+			name: this.AzanPopupStageName,
+			lightweight: true
+		};
+		// Specify the stage type with the last property.
+		this.controller.createStageWithCallback(stageArguments, pushMainScene, "popupalert");
+		
 	}
 }
 

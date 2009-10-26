@@ -5,6 +5,7 @@ function MenuHelper()
 	
 }
 
+
 MenuHelper.prototype.setupMenu = function(controller, command)
 {
 	controller.setupWidget(Mojo.Menu.commandMenu,

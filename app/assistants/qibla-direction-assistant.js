@@ -92,80 +92,9 @@ QiblaDirectionAssistant.prototype.cleanup = function(event) {
 	   a result of being popped off the scene stack */
 }
 
-QiblaDirectionAssistant.prototype.handleLocationResponse = function (event) {
-	
-	
-	appData.location = {
-		
-		"latitude": event.latitude,
-		"longitude": event.longitude,
-		"altitude": event.altitude,
-		"label": 'Working',
-		'default': false
-		
-	};
-	
-	appData.saveLocation();
-	this.updateViewMenu();
-
-	this.calcDirection();
-	
-	// got lat long... lets reverse it... and get the city state..
-	this.controller.serviceRequest('palm://com.palm.location', {
-			method : 'getReverseLocation',
-	        parameters: {
-				latitude: event.latitude,
-	            longitude: event.longitude
-	                },
-	        onSuccess: this.handleServiceResponseReverse.bind(this),
-	        onFailure: this.handleServiceResponseReverseError.bind(this)
-	    });
-
-	
-}
-
-QiblaDirectionAssistant.prototype.handleLocationResponseError = function (event) {
-	
-	Mojo.Controller.errorDialog($L("Sorry, we couldn't get your location."));
-	this.stopSpinner();
-	
-}
 
 String.prototype.trim = function() {
 	return this.replace(/^\s+|\s+$/g,"");
-}
-
-QiblaDirectionAssistant.prototype.handleServiceResponseReverse = function (event) {
-	
-
-	var ad = event.address.split(";");
-	ad.pop();
-	
-	var my_ad = ad.pop();
-	// see if there is a zipcode in there... and pull it out..
-	var parts = my_ad.trim().split(" ");
-	last_part = parts.pop();
-	if (isNaN(last_part) || last_part.length != 5) {
-		// not a zipcode.. push it back in..
-		parts.push(last_part);
-	}
-	my_ad = parts.join(" ");
-	
-	
-	
-	this.stopSpinner();
-	appData.location.label = my_ad;
-	this.updateViewMenu();
-	appData.saveLocation();
-	
-	
-	
-}
-
-QiblaDirectionAssistant.prototype.handleServiceResponseReverseError = function (event) {
-	// do nothing..
-	Mojo.Controller.errorDialog($L("Sorry, we couldn't get your city name."));
-	this.stopSpinner();
 }
 
 QiblaDirectionAssistant.prototype.startSpinner = function() {
@@ -187,19 +116,9 @@ QiblaDirectionAssistant.prototype.handleCommand = function(event) {
       switch(event.command) {
         case 'do-Update':
 		
-			this.startSpinner();		
-			this.controller.serviceRequest('palm://com.palm.location', {
-				method : 'getCurrentPosition',
-		        parameters: {
-					responseTime: 1,
-		            subscribe: false,
-					accuracy: 2
-		                },
-		        onSuccess: this.handleLocationResponse.bind(this),
-		        onFailure: this.handleLocationResponseError.bind(this)
-		    });
-		
-          
+			this.startSpinner();
+			locationManager.updateLocation(this.controller, this.locationUpdate.bind(this), this.locationUpdateComplete.bind(this), this.locationUpdateError.bind(this));
+		          
         	break;
 			
 		default:
@@ -209,3 +128,21 @@ QiblaDirectionAssistant.prototype.handleCommand = function(event) {
 		}
     }
 };
+
+QiblaDirectionAssistant.prototype.locationUpdateComplete = function() {
+	this.calcDirection();
+	this.stopSpinner();
+}
+
+QiblaDirectionAssistant.prototype.locationUpdateError = function() {
+	this.stopSpinner();
+}
+
+QiblaDirectionAssistant.prototype.locationUpdate = function () {
+	//Mojo.Controller.errorDialog("in update");
+	try {
+		this.updateViewMenu();
+	}catch (e) { 
+		Mojo.Controller.errorDialog(e.message);
+	}
+}
