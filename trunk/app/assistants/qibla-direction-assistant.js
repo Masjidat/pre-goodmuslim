@@ -204,7 +204,7 @@ QiblaDirectionAssistant.prototype.handleCommand = function(event) {
 			
 		default:
 			// see if our app menu helper can use this...
-			menuHelper.handleCommand(this.controller, event);
+			
 			break;
 		}
     }

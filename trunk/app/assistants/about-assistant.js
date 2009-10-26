@@ -13,6 +13,19 @@ AboutAssistant.prototype.setup = function() {
 	/* setup widgets here */
 	
 	/* add event handlers to listen to events from widgets */
+	
+	this.controller.setupWidget(Mojo.Menu.appMenu,
+        this.attributes = {
+           omitDefaultItems: true
+        },
+        this.model = {
+            visible: true,
+            items: [ 
+				Mojo.Menu.editItem,
+				{ label: "Preferences", command: "do-appPrefs"},
+				{ label: "Help", command: "do-About", disabled: true}
+            ]
+        });
 }
 
 AboutAssistant.prototype.activate = function(event) {

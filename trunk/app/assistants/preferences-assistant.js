@@ -39,6 +39,39 @@ function PreferencesAssistant(  ) {
 			{value:'GreatCircle', label:$L('Great Circle (Standard)')},
 			{value:'Mercator', label:$L('Mercator / Rhumb Lines')}
 	  ];
+	  
+	  this.optionFajr = [
+	  		{value: 'none', label:$L('None')},
+			{value: 'notification', label:$L('Notification')},
+			{value: 'azan', label:$L('Play Azan')}
+	  ];
+	  
+	  this.optionDhuhr = [
+	  		{value: 'none', label:$L('None')},
+			{value: 'notification', label:$L('Notification')},
+			{value: 'azan', label:$L('Play Azan')}
+	  ];
+	  
+	  this.optionAsr = [
+	  		{value: 'none', label:$L('None')},
+			{value: 'notification', label:$L('Notification')},
+			{value: 'azan', label:$L('Play Azan')}
+	  ];
+	  
+	  this.optionMaghrib = [
+	  		{value: 'none', label:$L('None')},
+			{value: 'notification', label:$L('Notification')},
+			{value: 'azan', label:$L('Play Azan')}
+	  ];
+	  
+	  this.optionIsha = [
+	  		{value: 'none', label:$L('None')},
+			{value: 'notification', label:$L('Notification')},
+			{value: 'azan', label:$L('Play Azan')}
+	  ];
+	  
+	  	  	
+
 
 }
 
@@ -51,11 +84,36 @@ PreferencesAssistant.prototype.setup = function() {
 	this.controller.setupWidget('timeformat', {label: $L('Format'), multiline: true, choices: this.optionTimeFormat, modelProperty:'timeFormat'}, this.preferences);
 	this.controller.setupWidget('qiblamethod', {label: $L('Method'), multiline: true, choices: this.optionQibla, modelProperty:'qiblaMethod'}, this.preferences);
 	
+	this.controller.setupWidget('notifyFajr', {label: $L('Fajr'), multiline: true, choices: this.optionFajr, modelProperty:'notifyFajr'}, this.preferences);
+	this.controller.setupWidget('notifyDhuhr', {label: $L('Dhuhr'), multiline: true, choices: this.optionDhuhr, modelProperty:'notifyDhuhr'}, this.preferences);
+	this.controller.setupWidget('notifyAsr', {label: $L('Asr'), multiline: true, choices: this.optionAsr, modelProperty:'notifyAsr'}, this.preferences);
+	this.controller.setupWidget('notifyMaghrib', {label: $L('Maghrib'), multiline: true, choices: this.optionMaghrib, modelProperty:'notifyMaghrib'}, this.preferences);
+	this.controller.setupWidget('notifyIsha', {label: $L('Isha'), multiline: true, choices: this.optionIsha, modelProperty:'notifyIsha'}, this.preferences);
+	
 	this.controller.listen("convention", Mojo.Event.propertyChange, this.savePreferences.bind(this));
 	this.controller.listen("asrmethod", Mojo.Event.propertyChange, this.savePreferences.bind(this));
 	this.controller.listen("highlats", Mojo.Event.propertyChange, this.savePreferences.bind(this));
 	this.controller.listen("timeformat", Mojo.Event.propertyChange, this.savePreferences.bind(this));
 	this.controller.listen("qiblamethod", Mojo.Event.propertyChange, this.savePreferences.bind(this));
+	
+	this.controller.listen("notifyFajr", Mojo.Event.propertyChange, this.savePreferences.bind(this));
+	this.controller.listen("notifyDhuhr", Mojo.Event.propertyChange, this.savePreferences.bind(this));
+	this.controller.listen("notifyAsr", Mojo.Event.propertyChange, this.savePreferences.bind(this));
+	this.controller.listen("notifyMaghrib", Mojo.Event.propertyChange, this.savePreferences.bind(this));
+	this.controller.listen("notifyIsha", Mojo.Event.propertyChange, this.savePreferences.bind(this));
+
+	this.controller.setupWidget(Mojo.Menu.appMenu,
+        this.attributes = {
+           omitDefaultItems: true
+        },
+        this.model = {
+            visible: true,
+            items: [ 
+				Mojo.Menu.editItem,
+				{ label: "Preferences", command: "do-appPrefs", disabled: true },
+				{ label: "Help", command: "do-About"}
+            ]
+        });
 
 }
 

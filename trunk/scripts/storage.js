@@ -11,9 +11,25 @@ function AppData(){
 			"juristicMethod": 'Shafii',
 			"latitudeAdjustment": 'None',
 			"timeFormat": 'Time12',
-			"qiblaMethod": 'GreatCircle'
+			"qiblaMethod": 'GreatCircle',
+			"prayerNotification": 'None'
 		};
 	}
+	
+	if (!this.preferences.notifyFajr)
+		this.preferences.notifyFajr = "none";
+		
+	if (!this.preferences.notifyDhuhr)
+		this.preferences.notifyDhuhr = "none";
+		
+	if (!this.preferences.notifyAsr)
+		this.preferences.notifyAsr = "none";
+		
+	if (!this.preferences.notifyMaghrib)
+		this.preferences.notifyMaghrib = "none";
+		
+	if (!this.preferences.notifyIsha)
+		this.preferences.notifyIsha = "none";
 	
 	cookie = new Mojo.Model.Cookie("location");
 	this.location = cookie.get();
