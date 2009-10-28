@@ -70,6 +70,11 @@ function PreferencesAssistant(  ) {
 			{value: 'azan', label:$L('Play Azan')}
 	  ];
 	  
+	  this.optionAzanType = [
+	  		{value: 'sunni', label:$L('Sunni')},
+			{value: 'shia', label: $L('Shia')}	  
+	  ];
+	  
 	  	  	
 
 
@@ -84,6 +89,8 @@ PreferencesAssistant.prototype.setup = function() {
 	this.controller.setupWidget('timeformat', {label: $L('Format'), multiline: true, choices: this.optionTimeFormat, modelProperty:'timeFormat'}, this.preferences);
 	this.controller.setupWidget('qiblamethod', {label: $L('Method'), multiline: true, choices: this.optionQibla, modelProperty:'qiblaMethod'}, this.preferences);
 	
+	this.controller.setupWidget('azanType', {label: $L('Type'), multiline: true, choices: this.optionAzanType, modelProperty:'azanType'}, this.preferences);
+	
 	this.controller.setupWidget('notifyFajr', {label: $L('Fajr'), multiline: true, choices: this.optionFajr, modelProperty:'notifyFajr'}, this.preferences);
 	this.controller.setupWidget('notifyDhuhr', {label: $L('Dhuhr'), multiline: true, choices: this.optionDhuhr, modelProperty:'notifyDhuhr'}, this.preferences);
 	this.controller.setupWidget('notifyAsr', {label: $L('Asr'), multiline: true, choices: this.optionAsr, modelProperty:'notifyAsr'}, this.preferences);
@@ -95,6 +102,8 @@ PreferencesAssistant.prototype.setup = function() {
 	this.controller.listen("highlats", Mojo.Event.propertyChange, this.savePreferences.bind(this));
 	this.controller.listen("timeformat", Mojo.Event.propertyChange, this.savePreferences.bind(this));
 	this.controller.listen("qiblamethod", Mojo.Event.propertyChange, this.savePreferences.bind(this));
+	
+	this.controller.listen("azanType", Mojo.Event.propertyChange, this.savePreferences.bind(this));
 	
 	this.controller.listen("notifyFajr", Mojo.Event.propertyChange, this.savePreferences.bind(this));
 	this.controller.listen("notifyDhuhr", Mojo.Event.propertyChange, this.savePreferences.bind(this));
