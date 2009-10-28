@@ -17,10 +17,6 @@ AzanPopupAssistant.prototype.setup = function() {
 	this.controller.listen('myButton', Mojo.Event.tap, this.tapped.bind(this));
 	
 	this.controller.get('message').update("Time for " + this.prayer);
-
-	
-
-
 }
 
 AzanPopupAssistant.prototype.activate = function(event) {

@@ -26,7 +26,12 @@ AzanAssistant.prototype.activate = function(event) {
 AzanAssistant.prototype.updateDashboard = function(prayer)
 {
 	var info = {prayer: prayer};
-	Mojo.Controller.getAppController().showBanner("Time for " + prayer, {action: 'launchApp'});
+	/*Mojo.Controller.getAppController().showBanner({
+		messageText: "Time for " + prayer,
+		soundclass: "alert",
+		sound: undefined
+	}, {action: 'launchApp'});
+	*/
 	// Use render to convert the object and its properties along with a view file into a string
 	// containing HTML
 	var renderedInfo = Mojo.View.render({object: info, template: 'azan/message'});

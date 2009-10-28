@@ -116,10 +116,10 @@ PrayerTimeManager.prototype.setUpdateAlarm = function ()
 	// add 27 hours.. to cover any DST issues..
 	d = new Date(d.getTime() + (27 * 60 * 60 * 1000));
 	
-	// set to midnight + 2 minutes.
-	d.setHours(0);
+	// set to 2am + 2 minutes.
+	d.setHours(2);
 	d.setMinutes(2);
-	d.setSeconds(0);
+	d.setSeconds(0); 
 	
 	//d = new Date( new Date().getTime() + (2 * 60 * 1000));
 	
@@ -171,8 +171,8 @@ PrayerTimeManager.prototype.setAlarm = function (key, time) {
 	
 	// if the time has already passed for this prayer...
 	// then don't set the alarm..
-	//if (d.getTime() < new Date().getTime())
-		//return;
+	if (d.getTime() < new Date().getTime())
+		return;
 	
 	//make sure to use UTC time
 	params['at'] = d.format("UTC:mm/dd/yyyy HH:MM:ss");
@@ -189,12 +189,12 @@ PrayerTimeManager.prototype.setAlarm = function (key, time) {
 
 PrayerTimeManager.prototype.handleAlarmSetResponse = function (event)
 {
-	this.view.get('logger').update(this.view.get('logger').innerHTML + "<BR>" + "event received" + event.returnValue);
+	//this.view.get('logger').update(this.view.get('logger').innerHTML + "<BR>" + "event received" + event.returnValue);
 }
 
 PrayerTimeManager.prototype.handleAlarmSetResponseError = function (error)
 {
-	this.view.get('logger').update("error received: " + error);
+	//this.view.get('logger').update("error received: " + error);
 }
 
 
