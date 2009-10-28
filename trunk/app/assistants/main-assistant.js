@@ -46,13 +46,6 @@ MainAssistant.prototype.setup = function() {
 		menuHelper.setupMenu(this.controller, "PrayerTimes");
 	} catch (e) { $('logger').update(e.message);}
 	
-	this.model = {
-     buttonLabel : "Button 5"
-	};
-	this.controller.setupWidget('myButton', {}, this.model);
-	//add a listener
-	this.controller.listen('myButton', Mojo.Event.tap, this.tapped.bind(this));
-	
 	
 }
 
@@ -128,33 +121,6 @@ String.prototype.trim = function() {
 	return this.replace(/^\s+|\s+$/g,"");
 }
 
-MainAssistant.prototype.tapped = function(event) {
-     $('logger').update("button pressed");
-	 /*
-	  this.controller.serviceRequest('palm://com.palm.power/timeout', {
-		method: "set",
-		parameters: {
-			"wakeup": true,
-			"key": "com.xivix.goodmuslim.fajr",
-			"uri": "palm://com.palm.applicationManager/launch",
-			"params": '{"id":"com.xivix.goodmuslim","params":{"action":"playAzan", "prayer":"fajr"}}',
-			"at": "10/25/2009 03:20:00"
-			},
-		onSuccess: function() { $('logger').update(new Date());},
-		onFailure: function() { $('logger').update("can't set timer");}
-	});
-	*/
-	try {
-		this.audioPlayer = new Audio();
-		var file = Mojo.appPath + "sounds/azan.mp3";
-		this.audioPlayer.src = file;
-		$('logger').update(file);
-	} 
-	catch (e) {
-		$('logger').update(e.message);
-	}
-	//Mojo.Controller.getAppController().assistant.handleLaunch( {"action":"playAzan", "prayer": "Fajr"} );
-}
 
 MainAssistant.prototype.deactivate = function(event) {
 	/* remove any event handlers you added in activate and do any other cleanup that should happen before

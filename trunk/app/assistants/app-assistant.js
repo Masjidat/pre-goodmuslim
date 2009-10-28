@@ -16,7 +16,8 @@ AppAssistant.prototype.handleLaunch = function (launchParams) {
 		// Look for an existing main stage by name.
 		var stageProxy = this.controller.getStageProxy(this.MainStageName);
 		var stageController = this.controller.getStageController(this.MainStageName);
-		
+
+
 		if (!launchParams || launchParams.action == "launchApp") {
 			if (stageProxy) {
 				// If the stage exists, just bring it to the front by focusing its window.
@@ -41,6 +42,7 @@ AppAssistant.prototype.handleLaunch = function (launchParams) {
 				
 			}
 		} else {
+			
 			// have launch params...
 			switch (launchParams.action)
 			{
@@ -108,8 +110,12 @@ AppAssistant.prototype.handleAzanPopup = function(whichAzan){
 		};
 		var stageArguments = {
 			name: this.AzanPopupStageName,
-			lightweight: true
+			lightweight: true,
+			height: 148
 		};
+		
+
+		
 		// Specify the stage type with the last property.
 		this.controller.createStageWithCallback(stageArguments, pushMainScene, "popupalert");
 		
