@@ -30,6 +30,9 @@ function AppData(){
 		
 	if (!this.preferences.notifyIsha)
 		this.preferences.notifyIsha = "none";
+		
+	if (!this.preferences.azanType)
+		this.preferences.azanType = "sunni";
 	
 	cookie = new Mojo.Model.Cookie("location");
 	this.location = cookie.get();
