@@ -52,7 +52,7 @@ AppAssistant.prototype.handleLaunch = function (launchParams) {
 					
 				case "updateTimes":
 					prayerTimeManager.calcTimes();
-					Mojo.Controller.getAppController().showBanner("Updating Times", {action: 'launchApp'});
+					//Mojo.Controller.getAppController().showBanner("Updating Times", {action: 'launchApp'});
 					break;
 			}
 		}
@@ -64,6 +64,8 @@ AppAssistant.prototype.handleLaunch = function (launchParams) {
 
 AppAssistant.prototype.handlePlayAzan = function(whichAzan){
 
+	appData = new AppData();
+	
 	if (appData.preferences['notify' + whichAzan] == "none")	
 		return;
 		
@@ -83,8 +85,11 @@ AppAssistant.prototype.handlePlayAzan = function(whichAzan){
 		var stageArgs = {
 				name: this.AzanStageName, 
 				lightweight: true, 
-				assistant: "AzanStageAssistant"
+				assistant: "AzanStageAssistant",
+				soundclass: "notifications",
+				sound: undefined
 			};
+		Mojo.Controller.getAppController().playSoundNotification("notifications");
 		Mojo.Controller.getAppController().createStageWithCallback(stageArgs, pushDashboard, 'dashboard');
 	}
 }
@@ -111,7 +116,9 @@ AppAssistant.prototype.handleAzanPopup = function(whichAzan){
 		var stageArguments = {
 			name: this.AzanPopupStageName,
 			lightweight: true,
-			height: 148
+			height: 148,
+			soundclass:"ringtones",
+			sound: "sounds/azan.mp3"
 		};
 		
 
