@@ -33,6 +33,9 @@ function AppData(){
 		
 	if (!this.preferences.azanType)
 		this.preferences.azanType = "sunni";
+		
+	if (!this.preferences.qiblaDirectionBackground)
+		this.preferences.qiblaDirectionBackground = "compass";
 	
 	cookie = new Mojo.Model.Cookie("location");
 	this.location = cookie.get();

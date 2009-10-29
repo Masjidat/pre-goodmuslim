@@ -18,7 +18,7 @@ function PreferencesAssistant(  ) {
 			{value:'Tehran', label:$L('University of Tehran')}  	
 	  ];
 	  
-	  this.optionAsr = [
+	  this.optionAsrMethod = [
 			{value:'Shafii', label:$L('Shafii (Standard)')},
 			{value:'Hanafi', label:$L('Hanafi')}
 	  ];
@@ -75,7 +75,11 @@ function PreferencesAssistant(  ) {
 			{value: 'shia', label: $L('Shia')}	  
 	  ];
 	  
-	  	  	
+	  this.optionDirectionBackground = [
+	  		{value: "compass", label:$L('Compass')},
+			{value: "map", label:$L('Map')}	  
+	  ];
+	    	  	
 
 
 }
@@ -84,12 +88,13 @@ PreferencesAssistant.prototype.setup = function() {
 
 
 	this.controller.setupWidget('convention', {label: $L('Convention'), multiline: true, choices: this.optionConventions, modelProperty:'calculationMethod'}, this.preferences);
-	this.controller.setupWidget('asrmethod', {label: $L('Method'), multiline: true, choices: this.optionAsr, modelProperty:'juristicMethod'}, this.preferences);
+	this.controller.setupWidget('asrmethod', {label: $L('Method'), multiline: true, choices: this.optionAsrMethod, modelProperty:'juristicMethod'}, this.preferences);
 	this.controller.setupWidget('highlats', {label: $L('Adjustment'), multiline: true, choices: this.optionHighLat, modelProperty:'latitudeAdjustment'}, this.preferences);
 	this.controller.setupWidget('timeformat', {label: $L('Format'), multiline: true, choices: this.optionTimeFormat, modelProperty:'timeFormat'}, this.preferences);
 	this.controller.setupWidget('qiblamethod', {label: $L('Method'), multiline: true, choices: this.optionQibla, modelProperty:'qiblaMethod'}, this.preferences);
+	this.controller.setupWidget('directionBackground', {label: $L('Background'), multiline: true, choices: this.optionDirectionBackground, modelProperty:'qiblaDirectionBackground'}, this.preferences);
 	
-	this.controller.setupWidget('azanType', {label: $L('Type'), multiline: true, choices: this.optionAzanType, modelProperty:'azanType'}, this.preferences);
+	this.controller.setupWidget('azanType', {label: $L('Azan Type'), multiline: true, choices: this.optionAzanType, modelProperty:'azanType'}, this.preferences);
 	
 	this.controller.setupWidget('notifyFajr', {label: $L('Fajr'), multiline: true, choices: this.optionFajr, modelProperty:'notifyFajr'}, this.preferences);
 	this.controller.setupWidget('notifyDhuhr', {label: $L('Dhuhr'), multiline: true, choices: this.optionDhuhr, modelProperty:'notifyDhuhr'}, this.preferences);
@@ -102,6 +107,7 @@ PreferencesAssistant.prototype.setup = function() {
 	this.controller.listen("highlats", Mojo.Event.propertyChange, this.savePreferences.bind(this));
 	this.controller.listen("timeformat", Mojo.Event.propertyChange, this.savePreferences.bind(this));
 	this.controller.listen("qiblamethod", Mojo.Event.propertyChange, this.savePreferences.bind(this));
+	this.controller.listen("directionBackground", Mojo.Event.propertyChange, this.savePreferences.bind(this));
 	
 	this.controller.listen("azanType", Mojo.Event.propertyChange, this.savePreferences.bind(this));
 	

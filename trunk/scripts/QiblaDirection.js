@@ -16,6 +16,7 @@ QiblaDirection.prototype.calculate = function(location)
 	result.azimuth = this.calculateAzimuth(location);
 	result.azimuthMag = this.calculateAzimuthMag(location, result.azimuth);
 	result.mercator = this.calcMercator(location);
+	result.mercatorMag = this.calculateAzimuthMag(location, result.mercator);
 	
 	return result;	
 	

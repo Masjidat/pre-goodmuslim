@@ -63,8 +63,6 @@ PrayerTimeManager.prototype.updateDisplay = function() {
 			this.view.get('times_' + i).removeClassName("highlighted");
 		}
 		
-		this.setAlarm(prayTime.timeNames[i], thisPrayer);
-		
 	}
 	
 	if (appData.preferences.latestTimes[4] == appData.preferences.latestTimes[5])

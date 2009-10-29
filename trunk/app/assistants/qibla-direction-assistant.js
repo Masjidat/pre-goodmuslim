@@ -60,13 +60,26 @@ QiblaDirectionAssistant.prototype.calcDirection = function ()
 		
 		
 		var angleToUse = 0;
-		if (appData.preferences.qiblaMethod == "Mercator")
-			angleToUse = result.mercator;
+		if (appData.preferences.qiblaMethod == "Mercator") {
+			if (appData.preferences.qiblaDirectionBackground == "map")
+				angleToUse = result.mercator;
+			else 
+				angleToUse = result.mercatorMag;
+		}
+		else {
+			if (appData.preferences.qiblaDirectionBackground == "map")
+				angleToUse = result.azimuth;
+			else 
+				angleToUse = result.azimuthMag;
+		}
+		
+		if (appData.preferences.qiblaDirectionBackground == "map")
+			$('directionBackground').update("<img src=\"http://maps.google.com/maps/api/staticmap?center=" + appData.location.latitude + "," + appData.location.longitude + "&zoom=13&size=280x290&maptype=roadmap&sensor=false&key=ABQIAAAAJGDfJAJaZVQh0APprhCCmBSPMfPq2s45eHvZIOwK1zU0RUMXaBRhdhWA9YWDS3f1ZPzQjWahcvKLyg\">");
 		else 
-			angleToUse = result.azimuthMag;
+			$('directionBackground').update("<img src=\"images/compass.png\" style='margin-left: 3px;'>");
+		
 		
 		$('arrow').setStyle('-webkit-transform: rotate(' + angleToUse + 'deg);');
-		
 		
 	} catch (e) { $('logger').update(e.message); }
 }
