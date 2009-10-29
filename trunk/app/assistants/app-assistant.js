@@ -118,7 +118,7 @@ AppAssistant.prototype.handleAzanPopup = function(whichAzan){
 			lightweight: true,
 			height: 148,
 			soundclass:"ringtones",
-			sound: "sounds/azan.mp3"
+			sound: "sounds/" + appData.preferences.azanType + "_azan.mp3"
 		};
 		
 
