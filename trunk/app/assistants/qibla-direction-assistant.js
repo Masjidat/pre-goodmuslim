@@ -74,9 +74,9 @@ QiblaDirectionAssistant.prototype.calcDirection = function ()
 		}
 		
 		if (appData.preferences.qiblaDirectionBackground == "map")
-			$('directionBackground').update("<img src=\"http://maps.google.com/maps/api/staticmap?center=" + appData.location.latitude + "," + appData.location.longitude + "&zoom=13&size=280x290&maptype=roadmap&sensor=false&key=ABQIAAAAJGDfJAJaZVQh0APprhCCmBSPMfPq2s45eHvZIOwK1zU0RUMXaBRhdhWA9YWDS3f1ZPzQjWahcvKLyg\">");
+			$('directionBackground').update("<img src=\"http://maps.google.com/maps/api/staticmap?center=" + appData.location.latitude + "," + appData.location.longitude + "&zoom=13&size=" + screen.width + "x" + screen.height + "&maptype=roadmap&sensor=false&key=ABQIAAAAJGDfJAJaZVQh0APprhCCmBSPMfPq2s45eHvZIOwK1zU0RUMXaBRhdhWA9YWDS3f1ZPzQjWahcvKLyg\">");
 		else 
-			$('directionBackground').update("<img src=\"images/compass.png\" style='margin-left: 3px;'>");
+			$('directionBackground').update("<img src=\"images/compass_small.png\" style='margin-left: 3px;'>");
 		
 		
 		$('arrow').setStyle('-webkit-transform: rotate(' + angleToUse + 'deg);');
