@@ -74,14 +74,21 @@ QiblaDirectionAssistant.prototype.calcDirection = function ()
 		}
 		
 		if (appData.preferences.qiblaDirectionBackground == "map")
-			$('directionBackground').update("<img src=\"http://maps.google.com/maps/api/staticmap?center=" + appData.location.latitude + "," + appData.location.longitude + "&zoom=13&size=" + screen.width + "x" + screen.height + "&maptype=roadmap&sensor=false&key=ABQIAAAAJGDfJAJaZVQh0APprhCCmBSPMfPq2s45eHvZIOwK1zU0RUMXaBRhdhWA9YWDS3f1ZPzQjWahcvKLyg\">");
+			$('directionBackground').update("<img src=\"http://maps.google.com/maps/api/staticmap?center=" + appData.location.latitude + "," + appData.location.longitude + "&zoom=11&size=" + screen.width + "x" + (screen.height - 28) + "&maptype=roadmap&sensor=false&key=ABQIAAAAJGDfJAJaZVQh0APprhCCmBSPMfPq2s45eHvZIOwK1zU0RUMXaBRhdhWA9YWDS3f1ZPzQjWahcvKLyg\"><img src=\"images/compass_small.png\" id='compass_img' style='margin-left: 3px; position: absolute; opacity: .8'>");
 		else 
-			$('directionBackground').update("<img src=\"images/compass_small.png\" style='margin-left: 3px;'>");
+			$('directionBackground').update("<img src=\"images/compass_small.png\" id='compass_img' style='margin-left: 3px; position: absolute;'>");
 		
 		
+		$('arrow').show().setStyle({
+			"top": (((screen.height - 28) / 2) - 119) + "px"
+		});		
 		$('arrow').setStyle('-webkit-transform: rotate(' + angleToUse + 'deg);');
 		
-	} catch (e) { $('logger').update(e.message); }
+		
+		$('compass_img').setStyle({"left": ( (screen.width / 2) - 96) + "px", "top": (((screen.height - 28) / 2) - 100) + "px"});
+		
+		
+	} catch (e) {  }
 }
 
 QiblaDirectionAssistant.prototype.activate = function(event) {
