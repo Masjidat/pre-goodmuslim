@@ -1,40 +1,44 @@
 [
-    {"source": "app\/assistants\/app-assistant.js"},
-    {"source": "app\/assistants\/stage-assistant.js"},
-    {"source": "app\/assistants\/azan-stage-assistant.js"},
+    {"source": "app/assistants/app-assistant.js"},
+    {"source": "app/assistants/stage-assistant.js"},
+    {"source": "app/assistants/azan-stage-assistant.js"},
     {
-        "source": "app\/assistants\/main-assistant.js",
-        "scenes": "main"
+        "scenes": "main",
+        "source": "app/assistants/main-assistant.js"
     },
     {
-        "source": "app\/assistants\/about-assistant.js",
-        "scenes": "about"
+        "scenes": "about",
+        "source": "app/assistants/about-assistant.js"
     },
     {
-        "source": "app\/assistants\/preferences-assistant.js",
-        "scenes": "preferences"
+        "scenes": "preferences",
+        "source": "app/assistants/preferences-assistant.js"
     },
-    {"source": "scripts\/PrayTime.js"},
-    {"source": "scripts\/QiblaDirection.js"},
-    {"source": "scripts\/storage.js"},
-    {"source": "scripts\/MoonPhase.js"},
-    {"source": "scripts\/LocationManager.js"},
-    {"source": "scripts\/PrayerTimeManager.js"},
-    {"source": "scripts\/AppMenuHelper.js"},
+    {"source": "scripts/PrayTime.js"},
+    {"source": "scripts/QiblaDirection.js"},
+    {"source": "scripts/storage.js"},
+    {"source": "scripts/MoonPhase.js"},
+    {"source": "scripts/LocationManager.js"},
+    {"source": "scripts/PrayerTimeManager.js"},
+    {"source": "scripts/AppMenuHelper.js"},
     {
-        "source": "app\/assistants\/moon-phase-assistant.js",
-        "scenes": "moon-phase"
-    },
-    {
-        "source": "app\/assistants\/qibla-direction-assistant.js",
-        "scenes": "qibla-direction"
+        "scenes": "moon-phase",
+        "source": "app/assistants/moon-phase-assistant.js"
     },
     {
-        "source": "app\/assistants\/azan-assistant.js",
-        "scenes": "azan"
+        "scenes": "qibla-direction",
+        "source": "app/assistants/qibla-direction-assistant.js"
     },
     {
-        "source": "app\/assistants\/azan-popup-assistant.js",
-        "scenes": "azan-popup"
+        "scenes": "azan",
+        "source": "app/assistants/azan-assistant.js"
+    },
+    {
+        "scenes": "azan-popup",
+        "source": "app/assistants/azan-popup-assistant.js"
+    },
+    {
+        "scenes": "location",
+        "source": "app/assistants/location-assistant.js"
     }
 ]

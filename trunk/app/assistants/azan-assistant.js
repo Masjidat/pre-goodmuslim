@@ -16,6 +16,8 @@ AzanAssistant.prototype.setup = function() {
 	
 	/* add event handlers to listen to events from widgets */
 	this.updateDashboard(this.prayer);
+	
+	this.controller.sceneElement.observe(Mojo.Event.tap, this.launchMain.bind(this));
 }
 
 AzanAssistant.prototype.activate = function(event) {

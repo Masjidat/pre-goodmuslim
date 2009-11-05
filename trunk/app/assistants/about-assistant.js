@@ -22,7 +22,8 @@ AboutAssistant.prototype.setup = function() {
             visible: true,
             items: [ 
 				Mojo.Menu.editItem,
-				{ label: "Preferences", command: "do-appPrefs"},
+				{ label: "My Location", command: "do-location"}, 
+				{ label: "Preferences", command: "do-appPrefs" },
 				{ label: "Help", command: "do-About", disabled: true}
             ]
         });

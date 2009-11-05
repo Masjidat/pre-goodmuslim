@@ -41,6 +41,7 @@ MenuHelper.prototype.setupMenu = function(controller, command)
             visible: true,
             items: [ 
 				Mojo.Menu.editItem,
+				{ label: "My Location", command: "do-location"}, 
 				{ label: "Preferences", command: "do-appPrefs"},
 				{ label: "Help", command: "do-About"}
             ]

@@ -42,9 +42,12 @@ function AppData(){
 	if (!this.location) {
 		this.location = {
 			'default': true,
-			'label': 'No Location'
+			'label': 'NA',
+			'latitude': "NA",
+			'longitude': "NA"
 		}
 	}
+
 }
 
 AppData.prototype.saveLocation = function () {

@@ -7,48 +7,10 @@ function QiblaDirectionAssistant() {
 
 QiblaDirectionAssistant.prototype.setup = function() {
 
-	this.viewMenuModel = {
-            visible: true,
-            items: [{}, {
-				items: [{
-					label: appData.location.label,
-					command: " ",
-					width: 257
-				}, {
-					label: "Refresh",
-					icon: 'refresh',
-					command: "do-Update",
-					disabled: false
-				},{}]
-			}
-            ]
-        };
-
-	this.controller.setupWidget(Mojo.Menu.viewMenu,
-        {
-           
-        },
-        this.viewMenuModel);
-	
-	/* setup Get Location activity indicator */
-	this.spinnerSAttrs = {
-		spinnerSize: 'large'
-	}
-	this.spinnerModel = {
-		spinning: false
-	}
-	this.controller.setupWidget('spinnerId', this.spinnerSAttrs, this.spinnerModel);
-	
 	try {
 		menuHelper.setupMenu(this.controller, "QiblaDirection");
 	} catch (e) { }
 
-}
-
-QiblaDirectionAssistant.prototype.updateViewMenu = function ()
-{
-	this.viewMenuModel.items[1].items[0].label=appData.location.label;
-	this.controller.modelChanged(this.viewMenuModel);
 }
 
 QiblaDirectionAssistant.prototype.calcDirection = function ()
@@ -60,6 +22,7 @@ QiblaDirectionAssistant.prototype.calcDirection = function ()
 		
 		
 		var angleToUse = 0;
+		var compassAngle = 0;
 		if (appData.preferences.qiblaMethod == "Mercator") {
 			if (appData.preferences.qiblaDirectionBackground == "map")
 				angleToUse = result.mercator;
@@ -73,10 +36,25 @@ QiblaDirectionAssistant.prototype.calcDirection = function ()
 				angleToUse = result.azimuthMag;
 		}
 		
-		if (appData.preferences.qiblaDirectionBackground == "map")
-			$('directionBackground').update("<img src=\"http://maps.google.com/maps/api/staticmap?center=" + appData.location.latitude + "," + appData.location.longitude + "&zoom=11&size=" + screen.width + "x" + (screen.height - 28) + "&maptype=roadmap&sensor=false&key=ABQIAAAAJGDfJAJaZVQh0APprhCCmBSPMfPq2s45eHvZIOwK1zU0RUMXaBRhdhWA9YWDS3f1ZPzQjWahcvKLyg\"><img src=\"images/compass_small.png\" id='compass_img' style='margin-left: 3px; position: absolute; opacity: .8'>");
-		else 
-			$('directionBackground').update("<img src=\"images/compass_small.png\" id='compass_img' style='margin-left: 3px; position: absolute;'>");
+		if (appData.preferences.qiblaDirectionBackground == "map") {
+			$('directionBackground').update("<div id='mymap'><div style='padding-top:70px;'>Loading Map...</div></div><img src=\"images/Compass_trans.png\" id='compass_img' style='position: absolute;'>");
+			
+			this.img = new Image();
+			this.img.onload = this.updateBackground.bind(this);
+			this.img.onerror = this.backgroundLoadError.bind(this);
+			this.img.src= "http://maps.google.com/maps/api/staticmap?center=" + appData.location.latitude + "," + appData.location.longitude + "&zoom=11&size=" + screen.width + "x" + (screen.height - 28) + "&maptype=roadmap&sensor=false&key=ABQIAAAAJGDfJAJaZVQh0APprhCCmBSPMfPq2s45eHvZIOwK1zU0RUMXaBRhdhWA9YWDS3f1ZPzQjWahcvKLyg";
+ 
+			// rotate compass to match azimuth...
+			if (appData.preferences.qiblaMethod == "Mercator")
+				compassAngle = result.mercator - result.mercatorMag;
+			else 
+				compassAngle = result.azimuth - result.azimuthMag;
+				
+			$('compass_img').setStyle('-webkit-transform: rotate(' + compassAngle + 'deg);');
+			
+		} else {
+			$('directionBackground').update("<img src=\"images/Compass_trans.png\" id='compass_img' style='position: absolute;'>");
+		}
 		
 		
 		$('arrow').show().setStyle({
@@ -85,20 +63,49 @@ QiblaDirectionAssistant.prototype.calcDirection = function ()
 		$('arrow').setStyle('-webkit-transform: rotate(' + angleToUse + 'deg);');
 		
 		
-		$('compass_img').setStyle({"left": ( (screen.width / 2) - 96) + "px", "top": (((screen.height - 28) / 2) - 100) + "px"});
+		$('compass_img').setStyle({"left": ( (screen.width / 2) - 160) + "px", "top": (((screen.height - 28) / 2) - 122) + "px"});
+		
+		// rotate compass to match azimuth...
 		
 		
 	} catch (e) {  }
 }
 
+QiblaDirectionAssistant.prototype.updateBackground = function () {
+	$('mymap').update("<img src=\"" + this.img.src + "\">");
+}
+QiblaDirectionAssistant.prototype.backgroundLoadError = function () {
+	$('mymap').update("");
+	Mojo.Controller.errorDialog("The Map image failed to load.  Make sure you have a data connection available.");
+}
+
+
 QiblaDirectionAssistant.prototype.activate = function(event) {
 	/* put in event handlers here that should only be in effect when this scene is active. For
 	   example, key handlers that are observing the document */
 	  
-	  if (!appData.location["default"])
+	  if (!appData.location["default"]) {
 	  	this.calcDirection();
-	  else 
-	  	Mojo.Controller.errorDialog($L("Your Location is required to calculate the Qibla Direction.  Please update your location by using the button in the upper right."));
+		$('mylocation').update(appData.location.label);
+	  } else {
+	  	this.controller.showAlertDialog({
+		    onChoose: this.firstLocationUpdate.bind(this),
+		    title: $L("Location Required"),
+		    message: $L("Your location is required to determine your Qibla Direction."),
+		    choices:[
+		         {label:$L('Update My Location Now'), value:"update", type:'affirmative'},  
+		         {label:$L("I will update later"), value:"cancel", type:'dismiss'}    
+		    ]
+		});
+
+	  }
+}
+
+QiblaDirectionAssistant.prototype.firstLocationUpdate = function (value) {
+	//function(value) {this.outputDisplay.innerHTML = $L("Alert result = ") + value;},
+	
+	if (value == "update")
+		this.controller.stageController.pushScene("location");
 }
 
 
@@ -117,52 +124,3 @@ String.prototype.trim = function() {
 	return this.replace(/^\s+|\s+$/g,"");
 }
 
-QiblaDirectionAssistant.prototype.startSpinner = function() {
-	this.spinnerModel.spinning = true;
-	this.controller.modelChanged(this.spinnerModel); 
-	$('my-scrim').show();      
-}
-
-QiblaDirectionAssistant.prototype.stopSpinner = function () {
-	this.spinnerModel.spinning = false;
-	this.controller.modelChanged(this.spinnerModel); 
-	$('my-scrim').hide();      
-}
-
-QiblaDirectionAssistant.prototype.handleCommand = function(event) {
-  this.controller=Mojo.Controller.stageController.activeScene();
-    if(event.type == Mojo.Event.command) {
-
-      switch(event.command) {
-        case 'do-Update':
-		
-			this.startSpinner();
-			locationManager.updateLocation(this.controller, this.locationUpdate.bind(this), this.locationUpdateComplete.bind(this), this.locationUpdateError.bind(this));
-		          
-        	break;
-			
-		default:
-			// see if our app menu helper can use this...
-			
-			break;
-		}
-    }
-};
-
-QiblaDirectionAssistant.prototype.locationUpdateComplete = function() {
-	this.calcDirection();
-	this.stopSpinner();
-}
-
-QiblaDirectionAssistant.prototype.locationUpdateError = function() {
-	this.stopSpinner();
-}
-
-QiblaDirectionAssistant.prototype.locationUpdate = function () {
-	//Mojo.Controller.errorDialog("in update");
-	try {
-		this.updateViewMenu();
-	}catch (e) { 
-		Mojo.Controller.errorDialog(e.message);
-	}
-}

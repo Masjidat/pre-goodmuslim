@@ -125,6 +125,7 @@ PreferencesAssistant.prototype.setup = function() {
             visible: true,
             items: [ 
 				Mojo.Menu.editItem,
+				{ label: "My Location", command: "do-location"}, 
 				{ label: "Preferences", command: "do-appPrefs", disabled: true },
 				{ label: "Help", command: "do-About"}
             ]
