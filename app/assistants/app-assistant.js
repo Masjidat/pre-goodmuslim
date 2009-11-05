@@ -160,6 +160,10 @@ AppAssistant.prototype.handleCommand = function(event) {
 			case "do-appPrefs":
 				stageController.pushScene("preferences");
 				break;
+				
+			case "do-location":
+				stageController.pushScene("location");
+				break;
 		}
 	}
 }
